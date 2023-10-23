@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (() => {
     const hash = include("./hash.js");
 
     function _encode_dict(value) {
@@ -18,30 +18,30 @@ var module = (function() {
     }
 
     return {
-        sign: function(payload, secret, options) {
-            var algorithm = (options || {})["algorithm"] || "HS256";
-            var header = {
+        sign: (payload, secret, options) => {
+            const algorithm = (options || {})["algorithm"] || "HS256";
+            const header = {
                 "typ": "JWT",
                 "alg": algorithm
             }
 
-            var message = _encode_dict(header) + "." + _encode_dict(payload);
-            var signature = hash.digest(algorithm, secret, message);
+            const message = _encode_dict(header) + "." + _encode_dict(payload);
+            const signature = hash.digest(algorithm, secret, message);
 
             if (signature) {
                 return message + "." + _encode(signature);
             }
         },
 
-        verify: function(token, secret, options) {
-            var components = token.split('.');
+        verify: (token, secret, options) => {
+            const components = token.split('.');
 
             if (components.length === 3) {
-                var header = _decode_dict(components[0]);
-                var payload = _decode_dict(components[1]);
-                var message = components[0] + "." + components[1];
-                var algorithm = header["alg"] || "HS256";
-                var signature = hash.digest(algorithm, secret, message);
+                const header = _decode_dict(components[0]);
+                const payload = _decode_dict(components[1]);
+                const message = components[0] + "." + components[1];
+                const algorithm = header["alg"] || "HS256";
+                const signature = hash.digest(algorithm, secret, message);
 
                 if (signature && _encode(signature) === components[2]) {
                     if ((options || {})["complete"]) {
