@@ -1,2 +1,2 @@
 # jwt
-A module for Json Web Token
+A Json Web Token module for Jamkit
